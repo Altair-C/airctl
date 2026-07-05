@@ -84,7 +84,7 @@ while true; do
     10) bash "${BASE_DIR}/scripts/user-add.sh"; pause ;;
     11) bash "${BASE_DIR}/scripts/user-del.sh"; pause ;;
     12) bash "${BASE_DIR}/scripts/user-passwd.sh"; pause ;;
-    13) bash "${BASE_DIR}/scripts/user-show.sh"; pause ;;
+    13) bash "${BASE_DIR}/scripts/user-show.sh" ;;
     14) bash "${BASE_DIR}/scripts/user-link.sh"; pause ;;
     15) bash "${BASE_DIR}/scripts/user-qr.sh"; pause ;;
 

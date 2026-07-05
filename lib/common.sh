@@ -40,13 +40,18 @@ get_service_status_icon() {
 }
 
 get_hysteria_version() {
+  local output
+
   if command -v hysteria >/dev/null 2>&1; then
-    hysteria version 2>&1 | head -n 1
+    output="$(hysteria version 2>&1 || true)"
   elif [ -x /usr/local/bin/hysteria ]; then
-    /usr/local/bin/hysteria version 2>&1 | head -n 1
+    output="$(/usr/local/bin/hysteria version 2>&1 || true)"
   else
     echo "unknown"
+    return
   fi
+
+  echo "$output" | awk -F'\t' '/^Version:/ {print "Hysteria " $2; exit}'
 }
 
 pause() {

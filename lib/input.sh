@@ -21,12 +21,17 @@ ui_read_choice() {
 
   case "$first" in
     q|Q)
-      echo
+      printf "\n" > /dev/tty
       printf "q"
       return
       ;;
+    0)
+      printf "0\n" > /dev/tty
+      printf "0"
+      return
+      ;;
     "")
-      echo
+      printf "\n" > /dev/tty
       printf ""
       return
       ;;

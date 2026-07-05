@@ -13,19 +13,23 @@ server_ip="$(curl -fsS https://api.ipify.org || hostname -I | awk '{print $1}')"
 port="$(config_get_port)"
 sni="$(config_get_sni)"
 
+divider() {
+  echo -e "${DIM}────────────────────────────────────────────${RESET}"
+}
+
 kv() {
   local k="$1"
   local v="$2"
-  printf " ${BRIGHT_BLUE}%-10s${RESET}: ${BRIGHT_WHITE}%s${RESET}\n" "$k" "$v"
+  printf " ${BRIGHT_BLUE}%-8s${RESET} : ${BRIGHT_WHITE}%s${RESET}\n" "$k" "$v"
 }
 
 page_title() {
   local title="$1"
-
+  clear
+  divider
+  echo -e " ${BOLD}${BRIGHT_WHITE}${title}${RESET}"
+  divider
   echo
-  echo -e "${BRIGHT_CYAN}────────────────────────────────────────────${RESET}"
-  echo -e "${BOLD}${BRIGHT_WHITE} $title${RESET}"
-  echo -e "${BRIGHT_CYAN}────────────────────────────────────────────${RESET}"
 }
 
 show_user_detail() {
@@ -48,67 +52,58 @@ show_user_detail() {
   link="hy2://${username}:${password}@${server_ip}:${port}/?sni=${sni}&insecure=1#${username}"
 
   while true; do
-    clear
     page_title "👤 用户详情"
 
-    section "👤" "用户信息" "$BRIGHT_BLUE"
+    echo -e "${BRIGHT_BLUE}👤 用户信息${RESET}"
+    divider
     kv "用户名" "$username"
     kv "备注" "${remark:-无}"
     kv "状态" "$status_icon $status_text"
     kv "创建时间" "${created_at:-unknown}"
 
-    section "🌐" "连接信息" "$BRIGHT_CYAN"
+    echo
+    echo -e "${BRIGHT_CYAN}🌐 连接信息${RESET}"
+    divider
     kv "服务器" "$server_ip"
     kv "端口" "${port}/udp"
     kv "SNI" "$sni"
     kv "协议" "Hysteria2"
 
-    section "🔐" "认证信息" "$BRIGHT_YELLOW"
+    echo
+    echo -e "${BRIGHT_YELLOW}🔐 认证信息${RESET}"
+    divider
     kv "密码" "$password"
 
-    section "🔗" "HY2 链接" "$BRIGHT_GREEN"
+    echo
+    echo -e "${BRIGHT_GREEN}🔗 HY2 链接${RESET}"
+    divider
     echo -e "${BRIGHT_WHITE}${link}${RESET}"
 
-    section "⚙️" "操作" "$BRIGHT_MAGENTA"
-    item 1 "修改密码"
-    item 2 "显示二维码"
-    item 3 "导出配置"
-    item 0 "返回上一层"
     echo
-    echo -e "${DIM}q. 退出 AirCtl${RESET}"
+    echo -e "${BRIGHT_MAGENTA}⚙️ 操作${RESET}"
+    divider
+    echo -e " ${BRIGHT_GREEN}1.${RESET} 修改密码"
+    echo -e " ${BRIGHT_GREEN}2.${RESET} 显示二维码"
+    echo -e " ${BRIGHT_GREEN}3.${RESET} 导出配置"
+    echo
+    echo -e " ${BRIGHT_GREEN}0.${RESET} 返回上一层"
+    echo -e " ${DIM}q. 退出 AirCtl${RESET}"
     echo
 
     read -rp "AirCtl > " action
 
     case "$action" in
-      1)
-        bash /opt/airctl/scripts/user-passwd.sh "$username"
-        read -rp "按 Enter 继续..."
-        ;;
-      2)
-        bash /opt/airctl/scripts/user-qr.sh "$username"
-        read -rp "按 Enter 继续..."
-        ;;
-      3)
-        bash /opt/airctl/scripts/user-link.sh "$username"
-        read -rp "按 Enter 继续..."
-        ;;
-      0)
-        return
-        ;;
-      q|Q)
-        exit 0
-        ;;
-      *)
-        echo "无效选择"
-        read -rp "按 Enter 继续..."
-        ;;
+      1) bash /opt/airctl/scripts/user-passwd.sh "$username"; read -rp "按 Enter 继续..." ;;
+      2) bash /opt/airctl/scripts/user-qr.sh "$username"; read -rp "按 Enter 继续..." ;;
+      3) bash /opt/airctl/scripts/user-link.sh "$username"; read -rp "按 Enter 继续..." ;;
+      0) return ;;
+      q|Q) exit 0 ;;
+      *) echo "无效选择"; read -rp "按 Enter 继续..." ;;
     esac
   done
 }
 
 while true; do
-  clear
   page_title "👤 用户列表"
 
   mapfile -t users < <(user_list_names)
@@ -124,28 +119,24 @@ while true; do
   for username in "${users[@]}"; do
     remark="$(user_remark "$username")"
     if [ -n "$remark" ]; then
-      printf " ${BRIGHT_GREEN}%3s${RESET}. ${BRIGHT_WHITE}%s${RESET} ${DIM}(%s)${RESET}\n\n" "$index" "$username" "$remark"
+      echo -e " ${BRIGHT_GREEN}${index}.${RESET} ${BRIGHT_WHITE}${username}${RESET} ${DIM}(${remark})${RESET}"
     else
-      printf " ${BRIGHT_GREEN}%3s${RESET}. ${BRIGHT_WHITE}%s${RESET}\n\n" "$index" "$username"
+      echo -e " ${BRIGHT_GREEN}${index}.${RESET} ${BRIGHT_WHITE}${username}${RESET}"
     fi
     index=$((index + 1))
   done
 
-  line
-  item 0 "返回上一层"
   echo
-  echo -e "${DIM}q. 退出 AirCtl${RESET}"
+  divider
+  echo -e " ${BRIGHT_GREEN}0.${RESET} 返回上一层"
+  echo -e " ${DIM}q. 退出 AirCtl${RESET}"
   echo
 
   read -rp "AirCtl > " choice
 
   case "$choice" in
-    0)
-      exit 0
-      ;;
-    q|Q)
-      exit 0
-      ;;
+    0) exit 0 ;;
+    q|Q) exit 0 ;;
   esac
 
   if ! [[ "$choice" =~ ^[0-9]+$ ]]; then

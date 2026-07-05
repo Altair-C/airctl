@@ -1,0 +1,16 @@
+[Unit]
+Description=AirCtl Subscription Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/airctl
+ExecStart=/usr/bin/python3 /opt/airctl/sub/server.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

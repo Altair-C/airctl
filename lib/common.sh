@@ -40,7 +40,13 @@ get_service_status_icon() {
 }
 
 get_hysteria_version() {
-  hysteria version 2>/dev/null | head -n 1 || echo "unknown"
+  if command -v hysteria >/dev/null 2>&1; then
+    hysteria version 2>&1 | head -n 1
+  elif [ -x /usr/local/bin/hysteria ]; then
+    /usr/local/bin/hysteria version 2>&1 | head -n 1
+  else
+    echo "unknown"
+  fi
 }
 
 pause() {

@@ -1,24 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USERS_DB="/etc/airctl/users.json"
+source /opt/airctl/lib/users.sh
+
+ensure_users_db
+migrate_users_db
 
 read -rp "请输入用户名: " username
 
-if ! jq -e --arg u "$username" '.[$u]' "$USERS_DB" >/dev/null; then
+if ! user_exists "$username"; then
   echo "用户不存在: $username"
   exit 1
 fi
 
 password="$(openssl rand -base64 18 | tr -d '=+/')"
+now="$(date '+%Y-%m-%d %H:%M:%S')"
 
-tmp="$(mktemp)"
-jq --arg u "$username" --arg p "$password" \
-  '.[$u].password = $p' \
-  "$USERS_DB" > "$tmp"
-
-cat "$tmp" > "$USERS_DB"
-rm -f "$tmp"
+user_set_password "$username" "$password" "$now"
 
 bash /opt/airctl/scripts/render-config.sh
 systemctl restart hysteria-server

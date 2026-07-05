@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USERS_DB="/etc/airctl/users.json"
+source /opt/airctl/lib/users.sh
+
+ensure_users_db
+migrate_users_db
 
 read -rp "请输入用户名: " username
 
@@ -10,26 +13,24 @@ if [ -z "$username" ]; then
   exit 1
 fi
 
-if jq -e --arg u "$username" '.[$u]' "$USERS_DB" >/dev/null; then
+if user_exists "$username"; then
   echo "用户已存在: $username"
   exit 1
 fi
 
+read -rp "请输入备注，可留空: " remark
+
 password="$(openssl rand -base64 18 | tr -d '=+/')"
+now="$(date '+%Y-%m-%d %H:%M:%S')"
 
-tmp="$(mktemp)"
-jq --arg u "$username" --arg p "$password" \
-  '. + {($u): {"password": $p, "created_at": now | floor}}' \
-  "$USERS_DB" > "$tmp"
-
-cat "$tmp" > "$USERS_DB"
-rm -f "$tmp"
+user_add "$username" "$remark" "$password" "$now"
 
 bash /opt/airctl/scripts/render-config.sh
 systemctl restart hysteria-server
 
 echo "用户创建成功"
-echo "username: $username"
-echo "password: $password"
+echo "用户名: $username"
+echo "备注: ${remark:-无}"
+echo "密码: $password"
 echo
 bash /opt/airctl/scripts/user-link.sh "$username"

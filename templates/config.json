@@ -1,0 +1,15 @@
+{
+  "server": {
+    "port": 8443,
+    "sni": "bing.com",
+    "masquerade": "https://www.bing.com/"
+  },
+  "tls": {
+    "cert": "/etc/hysteria/certs/server.crt",
+    "key": "/etc/hysteria/certs/server.key"
+  },
+  "paths": {
+    "users_db": "/etc/airctl/users.json",
+    "output_dir": "/opt/airctl/output"
+  }
+}

@@ -27,5 +27,5 @@ Check service:
 
 Restart service:
 
-    cd /opt/airport/compose
+    cd /opt/airctl/compose
     sudo docker compose restart

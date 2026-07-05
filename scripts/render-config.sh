@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USERS_DB="/etc/airport/users.json"
+USERS_DB="/etc/airctl/users.json"
 HYSTERIA_CONFIG="/etc/hysteria/config.yaml"
 PORT="8443"
 

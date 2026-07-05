@@ -16,7 +16,7 @@ Build a reusable deployment framework around Hiddify Manager.
 
 Hiddify Manager handles panel, core, users, subscriptions, and protocol management.
 
-airport-deploy handles:
+airctl handles:
 
 - server bootstrap
 - repeatable installation

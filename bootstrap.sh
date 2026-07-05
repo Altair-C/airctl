@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_NAME="airport-deploy"
-INSTALL_DIR="/opt/airport"
+PROJECT_NAME="airctl"
+INSTALL_DIR="/opt/airctl"
 
 log() {
   echo "[${PROJECT_NAME}] $*"

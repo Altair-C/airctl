@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-APP_DIR="/opt/airport"
+APP_DIR="/opt/airctl"
 VERSION_FILE="${APP_DIR}/VERSION"
 
 get_version() {
@@ -16,8 +16,8 @@ get_public_ip() {
 }
 
 get_user_count() {
-  if [ -f /etc/airport/users.json ]; then
-    jq 'length' /etc/airport/users.json 2>/dev/null || echo "0"
+  if [ -f /etc/airctl/users.json ]; then
+    jq 'length' /etc/airctl/users.json 2>/dev/null || echo "0"
   else
     echo "0"
   fi

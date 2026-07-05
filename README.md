@@ -1,4 +1,4 @@
-# airport-deploy
+# airctl
 
 No-panel Hysteria2 deployment framework.
 
@@ -17,7 +17,7 @@ No-panel Hysteria2 deployment framework.
 
 ## Manage
 
-    sudo airport
+    sudo airctl
 
 ## Ports
 

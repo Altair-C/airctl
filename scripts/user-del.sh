@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USERS_DB="/etc/airport/users.json"
+USERS_DB="/etc/airctl/users.json"
 
 read -rp "请输入要删除的用户名: " username
 
@@ -15,7 +15,7 @@ jq --arg u "$username" 'del(.[$u])' "$USERS_DB" > "$tmp"
 cat "$tmp" > "$USERS_DB"
 rm -f "$tmp"
 
-bash /opt/airport/scripts/render-config.sh
+bash /opt/airctl/scripts/render-config.sh
 systemctl restart hysteria-server
 
 echo "用户已删除: $username"

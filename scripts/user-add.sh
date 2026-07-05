@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USERS_DB="/etc/airport/users.json"
+USERS_DB="/etc/airctl/users.json"
 
 read -rp "请输入用户名: " username
 
@@ -25,11 +25,11 @@ jq --arg u "$username" --arg p "$password" \
 cat "$tmp" > "$USERS_DB"
 rm -f "$tmp"
 
-bash /opt/airport/scripts/render-config.sh
+bash /opt/airctl/scripts/render-config.sh
 systemctl restart hysteria-server
 
 echo "用户创建成功"
 echo "username: $username"
 echo "password: $password"
 echo
-bash /opt/airport/scripts/user-link.sh "$username"
+bash /opt/airctl/scripts/user-link.sh "$username"

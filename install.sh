@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP="airport"
-INSTALL_DIR="/opt/airport"
-CONFIG_DIR="/etc/airport"
+APP="airctl"
+INSTALL_DIR="/opt/airctl"
+CONFIG_DIR="/etc/airctl"
 HYSTERIA_CONFIG="/etc/hysteria/config.yaml"
 PORT="8443"
 
@@ -29,7 +29,7 @@ install_hysteria() {
 }
 
 prepare_dirs() {
-  mkdir -p "${INSTALL_DIR}" "${CONFIG_DIR}" /etc/hysteria /var/log/airport
+  mkdir -p "${INSTALL_DIR}" "${CONFIG_DIR}" /etc/hysteria /var/log/airctl
   cp -r . "${INSTALL_DIR}/"
 }
 
@@ -66,9 +66,9 @@ EOF_CONFIG
 chmod 640 "${HYSTERIA_CONFIG}"
 }
 
-install_airport_command() {
-  ln -sf "${INSTALL_DIR}/airport.sh" /usr/local/bin/airport
-  chmod +x "${INSTALL_DIR}/airport.sh"
+install_airctl_command() {
+  ln -sf "${INSTALL_DIR}/airctl.sh" /usr/local/bin/airctl
+  chmod +x "${INSTALL_DIR}/airctl.sh"
   chmod +x "${INSTALL_DIR}"/scripts/*.sh
 }
 
@@ -90,14 +90,14 @@ main() {
   prepare_dirs
   init_users_db
   write_hysteria_config
-  install_airport_command
+  install_airctl_command
   configure_firewall
   restart_service
 
   log "Install completed."
   echo
   echo "Run management menu:"
-  echo "  sudo airport"
+  echo "  sudo airctl"
 }
 
 main "$@"

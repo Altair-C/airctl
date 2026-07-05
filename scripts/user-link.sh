@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USERS_DB="/etc/airport/users.json"
+USERS_DB="/etc/airctl/users.json"
 PORT="8443"
 
 username="${1:-}"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BASE_DIR="/opt/airport"
+BASE_DIR="/opt/airctl"
 
 source "${BASE_DIR}/lib/ui.sh"
 source "${BASE_DIR}/lib/common.sh"

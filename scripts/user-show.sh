@@ -4,6 +4,7 @@ set -euo pipefail
 source /opt/airctl/lib/users.sh
 source /opt/airctl/lib/config.sh
 source /opt/airctl/lib/ui.sh
+source /opt/airctl/lib/input.sh
 
 ensure_users_db
 migrate_users_db
@@ -65,15 +66,16 @@ show_user_detail() {
     ui_nav
 
     ui_prompt
-    read -r action
+    action="$(ui_read_key)"
+    echo
 
     case "$action" in
-      1) bash /opt/airctl/scripts/user-passwd.sh "$username"; read -rp "按 Enter 继续..." ;;
-      2) bash /opt/airctl/scripts/user-qr.sh "$username"; read -rp "按 Enter 继续..." ;;
-      3) bash /opt/airctl/scripts/user-link.sh "$username"; read -rp "按 Enter 继续..." ;;
+      1) bash /opt/airctl/scripts/user-passwd.sh "$username"; ui_pause ;;
+      2) bash /opt/airctl/scripts/user-qr.sh "$username"; ui_pause ;;
+      3) bash /opt/airctl/scripts/user-link.sh "$username"; ui_pause ;;
       0) return ;;
       q|Q) exit 0 ;;
-      *) ui_warning "无效选择"; read -rp "按 Enter 继续..." ;;
+      *) ui_warning "无效选择"; ui_pause ;;
     esac
   done
 }
@@ -104,7 +106,8 @@ while true; do
 
   ui_nav
   ui_prompt
-  read -r choice
+  choice="$(ui_read_key)"
+  echo
 
   case "$choice" in
     0) exit 0 ;;
@@ -113,13 +116,13 @@ while true; do
 
   if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
     ui_warning "请输入数字"
-    read -rp "按 Enter 继续..."
+    ui_pause
     continue
   fi
 
   if [ "$choice" -lt 1 ] || [ "$choice" -gt "${#users[@]}" ]; then
     ui_warning "无效选择"
-    read -rp "按 Enter 继续..."
+    ui_pause
     continue
   fi
 

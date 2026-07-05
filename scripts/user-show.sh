@@ -16,12 +16,17 @@ sni="$(config_get_sni)"
 
 show_user_detail() {
   local username="$1"
-  local password remark enabled created_at status_icon status_text link
+  local password remark enabled created_at token status_icon status_text link
 
   password="$(user_password "$username")"
   remark="$(user_remark "$username")"
   enabled="$(user_enabled "$username")"
   created_at="$(user_created_at "$username")"
+  token="$(user_token "$username")"
+  if [ -z "$token" ]; then
+    token="$(openssl rand -hex 24)"
+    user_set_token "$username" "$token"
+  fi
 
   if [[ "$created_at" =~ Z$ ]]; then
     created_at="$(date -d "$created_at" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || echo "$created_at")"
@@ -55,6 +60,7 @@ show_user_detail() {
 
     ui_section "🔐 认证信息" "$BRIGHT_YELLOW"
     ui_field "密码" "$password"
+    ui_field "订阅Token" "$token"
 
     ui_section "🔗 HY2 链接" "$BRIGHT_GREEN"
     ui_link "$link"

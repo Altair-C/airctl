@@ -106,7 +106,6 @@ while true; do
 
   echo
   line
-  menu_item 0 "退出"
   echo -e " ${DIM}q : 退出 AirCtl${RESET}"
   echo
 
@@ -138,7 +137,8 @@ while true; do
     32) run_with_pause "${BASE_DIR}/scripts/restore.sh" ;;
     33) run_with_pause "${BASE_DIR}/scripts/update-hysteria.sh" ;;
 
-    0|q|Q) exit 0 ;;
+    q|Q) exit 0 ;;
+    0) error "主菜单无 0 操作，请输入 q 退出 AirCtl"; pause ;;
     *) error "无效选择"; pause ;;
   esac
 done

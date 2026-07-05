@@ -22,6 +22,10 @@ show_user_detail() {
   enabled="$(user_enabled "$username")"
   created_at="$(user_created_at "$username")"
 
+  if [[ "$created_at" =~ Z$ ]]; then
+    created_at="$(date -d "$created_at" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || echo "$created_at")"
+  fi
+
   if [ "$enabled" = "true" ]; then
     status_icon="🟢"
     status_text="Enabled"

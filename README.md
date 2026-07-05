@@ -1,6 +1,6 @@
 # airport-deploy
 
-Personal multi-user proxy deployment project.
+Reusable deployment framework for a private multi-user proxy service.
 
 ## Stack
 
@@ -11,6 +11,17 @@ Personal multi-user proxy deployment project.
 - Hysteria2
 - VLESS Reality
 
-## Goal
+## Current Status
 
-One-command deployment with user management, subscription generation, backup, restore, and Git-based maintenance.
+- v0.1.0: server bootstrap completed
+- v0.2.0: Marzban panel deployed
+
+## Dashboard Access
+
+Use SSH tunnel:
+
+    ssh -L 8000:127.0.0.1:8000 ubuntu@SERVER_IP
+
+Open:
+
+    http://127.0.0.1:8000/dashboard/

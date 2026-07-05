@@ -1,15 +1,25 @@
 # airport-deploy
 
-Reusable deployment framework for a private multi-user proxy service based on Hiddify Manager.
+No-panel Hysteria2 deployment framework.
 
-## Stack
+## Features
 
-- Ubuntu 24.04
-- Docker
-- Hiddify Manager
-- SingBox / Xray
-- Hysteria2 as the primary protocol
+- Hysteria2 official server
+- CLI menu management
+- User add/delete/list
+- Shadowrocket/sing-box link generation
+- QR code generation
+- systemd service management
 
-## Goal
+## Install
 
-Use official Hiddify Manager as the panel and build automation around installation, backup, restore, user operations, and Git-based maintenance.
+    sudo ./install.sh
+
+## Manage
+
+    sudo airport
+
+## Ports
+
+- 22/tcp SSH
+- 8443/udp Hysteria2

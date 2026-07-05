@@ -21,13 +21,14 @@ show_dashboard() {
   users="$(get_user_count)"
   hy_version="$(get_hysteria_version)"
 
-  header "$version"
-  echo
+  logo
+  title "$version"
+
   printf " ${BRIGHT_BLUE}Server ${RESET}: ${BRIGHT_WHITE}%s${RESET}\n" "$ip"
   printf " ${BRIGHT_BLUE}Service${RESET}: %s ${BRIGHT_WHITE}%s${RESET}\n" "$status_icon" "$status"
   printf " ${BRIGHT_BLUE}Port   ${RESET}: ${BRIGHT_WHITE}8443/udp${RESET}\n"
   printf " ${BRIGHT_BLUE}Users  ${RESET}: ${BRIGHT_WHITE}%s${RESET}\n" "$users"
-  printf " ${BRIGHT_BLUE}Core   ${RESET}: ${DIM}%s${RESET}\n" "$hy_version"
+  printf " ${BRIGHT_BLUE}Core   ${RESET}: ${DIM}%s${RESET}\n" "${hy_version:-unknown}"
 }
 
 while true; do

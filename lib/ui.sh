@@ -8,7 +8,6 @@ RED="\033[31m"
 GREEN="\033[32m"
 YELLOW="\033[33m"
 BLUE="\033[34m"
-MAGENTA="\033[35m"
 CYAN="\033[36m"
 WHITE="\033[37m"
 
@@ -16,7 +15,6 @@ BRIGHT_RED="\033[91m"
 BRIGHT_GREEN="\033[92m"
 BRIGHT_YELLOW="\033[93m"
 BRIGHT_BLUE="\033[94m"
-BRIGHT_MAGENTA="\033[95m"
 BRIGHT_CYAN="\033[96m"
 BRIGHT_WHITE="\033[97m"
 
@@ -24,13 +22,24 @@ line() {
   echo -e "${DIM}────────────────────────────────────────────────────────────${RESET}"
 }
 
-header() {
+logo() {
+  echo -e "${BRIGHT_CYAN}"
+  cat <<'LOGO'
+    _    _                       _
+   / \  (_) _ __  _ __    ___   | |_
+  / _ \ | || '__|| '_ \  / _ \  | __|
+ / ___ \| || |   | |_) || (_) | | |_
+/_/   \_\_||_|   | .__/  \___/   \__|
+                  |_|
+LOGO
+  echo -e "${RESET}"
+}
+
+title() {
   local version="$1"
 
-  echo -e "${BRIGHT_CYAN}╔════════════════════════════════════════════════════════════╗${RESET}"
-  echo -e "${BRIGHT_CYAN}║${RESET}                 ${BOLD}${BRIGHT_WHITE}Airport Deploy${RESET}                  ${BRIGHT_CYAN}║${RESET}"
-  echo -e "${BRIGHT_CYAN}║${RESET}                    ${DIM}Version ${version}${RESET}                    ${BRIGHT_CYAN}║${RESET}"
-  echo -e "${BRIGHT_CYAN}╚════════════════════════════════════════════════════════════╝${RESET}"
+  echo -e "${BOLD}${BRIGHT_WHITE}Airport Deploy ${BRIGHT_GREEN}v${version}${RESET}"
+  line
 }
 
 section() {

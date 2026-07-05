@@ -1,21 +1,27 @@
-# secrets
+# Secrets
+.env
 env/.env
-*.env
+compose/.env
 *.key
 *.pem
 *.crt
+*.csr
+*.p12
+*.pfx
+
+# Runtime data
+data/
+logs/
+backup/
 *.db
 *.sqlite
 *.sqlite3
 
-# runtime data
-data/
-backup/*.tar.gz
-backup/*.zip
+# Generated configs
+config/generated/
 
 # macOS
 .DS_Store
 
-# logs
+# Logs
 *.log
-logs/

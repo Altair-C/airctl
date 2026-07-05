@@ -16,13 +16,14 @@ sni="$(config_get_sni)"
 
 show_user_detail() {
   local username="$1"
-  local password remark enabled created_at token status_icon status_text link
+  local password remark enabled created_at token status_icon status_text hy2_link sub_link
 
   password="$(user_password "$username")"
   remark="$(user_remark "$username")"
   enabled="$(user_enabled "$username")"
   created_at="$(user_created_at "$username")"
   token="$(user_token "$username")"
+
   if [ -z "$token" ]; then
     token="$(openssl rand -hex 24)"
     user_set_token "$username" "$token"
@@ -40,7 +41,8 @@ show_user_detail() {
     status_text="Disabled"
   fi
 
-  link="hy2://${username}:${password}@${server_ip}:${port}/?sni=${sni}&insecure=1#${username}"
+  hy2_link="hy2://${username}:${password}@${server_ip}:${port}/?sni=${sni}&insecure=1#${username}"
+  sub_link="http://${server_ip}:8080/sub/${token}"
 
   while true; do
     clear
@@ -58,12 +60,14 @@ show_user_detail() {
     ui_field "SNI" "$sni"
     ui_field "协议" "Hysteria2"
 
+    ui_section "🔗 Shadowrocket" "$BRIGHT_GREEN"
+    ui_link "$hy2_link"
+
+    ui_section "🔗 Mihomo Party / Clash Verge Rev" "$BRIGHT_CYAN"
+    ui_link "$sub_link"
+
     ui_section "🔐 认证信息" "$BRIGHT_YELLOW"
     ui_field "密码" "$password"
-    ui_field "订阅Token" "$token"
-
-    ui_section "🔗 HY2 链接" "$BRIGHT_GREEN"
-    ui_link "$link"
 
     ui_section "⚙️ 操作" "$BRIGHT_MAGENTA"
     ui_menu_item "1" "修改密码"
@@ -95,7 +99,7 @@ while true; do
   if [ "${#users[@]}" -eq 0 ]; then
     ui_warning "暂无用户"
     echo
-    read -rp "按 Enter 返回..."
+    ui_pause
     exit 0
   fi
 

@@ -28,6 +28,10 @@ def find_user_by_token(token):
     return None, None
 
 
+def q(value):
+    return str(value).replace('"', '\\"')
+
+
 def generate_mihomo(username, user, config):
     server_ip = public_ip()
     port = config["server"]["port"]
@@ -36,25 +40,41 @@ def generate_mihomo(username, user, config):
 
     node_name = f"{username}-hy2"
 
+    # Hysteria2 userpass auth requires "username:password" as the client auth string.
+    hy2_auth = f"{username}:{password}"
+
     return f"""mixed-port: 7890
 allow-lan: false
 mode: rule
 log-level: info
+ipv6: false
+
+dns:
+  enable: true
+  listen: 127.0.0.1:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  nameserver:
+    - 1.1.1.1
+    - 8.8.8.8
 
 proxies:
-  - name: {node_name}
+  - name: "{q(node_name)}"
     type: hysteria2
-    server: {server_ip}
+    server: "{q(server_ip)}"
     port: {port}
-    password: {password}
-    sni: {sni}
+    password: "{q(hy2_auth)}"
+    sni: "{q(sni)}"
     skip-cert-verify: true
+    alpn:
+      - h3
+    udp: true
 
 proxy-groups:
   - name: PROXY
     type: select
     proxies:
-      - {node_name}
+      - "{q(node_name)}"
       - DIRECT
 
 rules:

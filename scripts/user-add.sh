@@ -21,12 +21,10 @@ fi
 read -rp "请输入备注，可留空: " remark
 
 password="$(openssl rand -base64 18 | tr -d '=+/')"
+token="$(openssl rand -hex 24)"
 now="$(date '+%Y-%m-%d %H:%M:%S')"
 
 user_add "$username" "$remark" "$password" "$now"
-token="$(openssl rand -hex 24)"
-user_set_token "$username" "$token"
-token="$(openssl rand -hex 24)"
 user_set_token "$username" "$token"
 
 bash /opt/airctl/scripts/render-config.sh
@@ -36,7 +34,5 @@ echo "用户创建成功"
 echo "用户名: $username"
 echo "备注: ${remark:-无}"
 echo "密码: $password"
-echo "订阅Token: $token"
-echo "订阅Token: $token"
 echo
 bash /opt/airctl/scripts/user-link.sh "$username"
